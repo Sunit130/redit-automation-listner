@@ -17,7 +17,16 @@ class GoogleDrive:
 
     def authenticate_with_service_account(self):
         """Authenticate using the Service Account JSON key."""
-        service_account_info = json.loads(os.environ.get("SERVICE_ACCOUNT_KEY"))
+        service_account_key = os.environ.get("SERVICE_ACCOUNT_KEY")
+
+        if not service_account_key:
+            raise ValueError("SERVICE_ACCOUNT_KEY environment variable is not set or is empty")
+
+        try:
+            print("service_account_key " : service_account_key)
+            service_account_info = json.loads(service_account_key)
+        except json.JSONDecodeError:
+            raise ValueError("Invalid JSON format for SERVICE_ACCOUNT_KEY")
         credentials = service_account.Credentials.from_service_account_info(
             service_account_info, scopes=self.SCOPES
         )

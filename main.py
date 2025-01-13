@@ -171,45 +171,73 @@ def list_files_in_current_directory():
 
 def process(args):
 
+    try:
 
-    print("STARTED DOWNLOADING BACKGROUND VIDEO")
-    start = time.time()
-    url = 'https://www.youtube.com/watch?v=n_Dv4JMiwK8'  # Replace with your video URL
-    start_time = 30  # Start time in seconds
-    end_time = 60    # End time in seconds
-    output_file = 'result.mp4'  # Output file name
-    audio_file = 'results/diuucz/audio.mp3'
-    subtitles_file = 'results/diuucz/subtitles.srt'
-    YoutubeDownload().stream_and_crop_video(url, start_time, end_time, output_file, audio_file, subtitles_file)
-    end = time.time()
-    print("COMPLETED DOWNLOADING BACKGROUND VIDEO")
-    print(f"Time taken: {end - start:.2f} seconds\n")
-
-    print("STARTED GOOGLE DRIVE UPLOADING")
-    start = time.time()
-    child_folder_name = 'diuucz'
-    parent_folder_id = "1PVR606GT6kWsuqGt97mH4NEv3SmvJww5"
-
-    drive = GoogleDrive()
-    output_video_path = f'result.mp4'
-    drive_service = drive.authenticate_with_service_account()
-    child_folder_id = drive.create_folder(drive_service, child_folder_name, parent_folder_id)
-    drive.upload_video_to_drive(drive_service, output_video_path, child_folder_id)
-    end = time.time()
-    print("COMPLETED GOOGLE DRIVE UPLOADING")
-    print(f"Time taken: {end - start:.2f} seconds\n")
+        print("STARTED FETCHING POST FROM PQ")
+        start = time.time()
+        pq = PriorityQueue(sheet_name="Redit Posts")
+        post = pq.front()
+        end = time.time()
+        print("GOT THE POST FROM QUEUE")
+        print(f"Time taken: {end - start:.2f} seconds\n")
 
 
-    # claenup 
-    print("STARTED CLEANUPs")
-    start = time.time()
-    list_files_in_current_directory()
-    cleanup_files()
-    list_files_in_current_directory()
-    end = time.time()
-    print("COMPLETED CLEANUP")
-    print(f"Time taken: {end - start:.2f} seconds\n")
+        print("STARTED FETCHING POST FROM PQ")
+        start = time.time()
+        pq = PriorityQueue(sheet_name="Redit Posts")
+        post = pq.front()
+        end = time.time()
+        print("GOT THE POST FROM QUEUE")
+        print(f"Time taken: {end - start:.2f} seconds\n")
 
+
+        print("STARTED DOWNLOADING BACKGROUND VIDEO")
+        start = time.time()
+        url = 'https://www.youtube.com/watch?v=n_Dv4JMiwK8'  # Replace with your video URL
+        start_time = 30  # Start time in seconds
+        end_time = 60    # End time in seconds
+        output_file = 'result.mp4'  # Output file name
+        audio_file = 'results/diuucz/audio.mp3'
+        subtitles_file = 'results/diuucz/subtitles.srt'
+        YoutubeDownload().stream_and_crop_video(url, start_time, end_time, output_file, audio_file, subtitles_file)
+        end = time.time()
+        print("COMPLETED DOWNLOADING BACKGROUND VIDEO")
+        print(f"Time taken: {end - start:.2f} seconds\n")
+
+        print("STARTED GOOGLE DRIVE UPLOADING")
+        start = time.time()
+        child_folder_name = 'diuucz'
+        parent_folder_id = "1PVR606GT6kWsuqGt97mH4NEv3SmvJww5"
+
+        drive = GoogleDrive()
+        output_video_path = f'result.mp4'
+        drive_service = drive.authenticate_with_service_account()
+        child_folder_id = drive.create_folder(drive_service, child_folder_name, parent_folder_id)
+        drive.upload_video_to_drive(drive_service, output_video_path, child_folder_id)
+        end = time.time()
+        print("COMPLETED GOOGLE DRIVE UPLOADING")
+        print(f"Time taken: {end - start:.2f} seconds\n")
+
+
+        # claenup 
+        print("STARTED CLEANUPs")
+        start = time.time()
+        list_files_in_current_directory()
+        cleanup_files()
+        list_files_in_current_directory()
+        end = time.time()
+        print("COMPLETED CLEANUP")
+        print(f"Time taken: {end - start:.2f} seconds\n")
+    except Exception as e:
+        print("CAUGHT EXCEPTION : ", str(e))
+        print("STARTED CLEANUPs")
+        start = time.time()
+        list_files_in_current_directory()
+        cleanup_files()
+        list_files_in_current_directory()
+        end = time.time()
+        print("COMPLETED CLEANUP")
+        print(f"Time taken: {end - start:.2f} seconds\n")
     return
     voices = {
         "male": "en-US-AndrewNeural",
