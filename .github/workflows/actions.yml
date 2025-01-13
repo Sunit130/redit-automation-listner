@@ -2,7 +2,7 @@ name: run main.py
 
 on:
   schedule:
-    - cron: '0 0 * * 1' # At 00:00 on Monday
+    - cron: '*/5 * * * *' # At 00:00 on Monday
 
 jobs:
   build:
@@ -30,6 +30,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           
-      - name: execute py script # run main.py
+      - name: Run Python Script
+        env:
+          SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
         run: python main.py
           
