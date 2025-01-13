@@ -29,7 +29,7 @@ class YoutubeDownload:
             'noplaylist': True,     # Avoid downloading playlists
             'quiet': True,          # Reduce verbosity
             'outtmpl': '-',         # Output to stdout (pipe it to ffmpeg)
-            'cookies': 'cookie.txt'
+            'cookiefile': 'cookies.txt'
         }
 
         # Use yt-dlp to get the video stream
