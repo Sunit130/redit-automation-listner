@@ -19,6 +19,7 @@ class PriorityQueue:
             raise ValueError("SERVICE_ACCOUNT_KEY environment variable is not set or is empty")
 
         try:
+            print("service_account_key : ", service_account_key)
             service_account_info = json.loads(service_account_key)
         except json.JSONDecodeError:
             raise ValueError("Invalid JSON format for SERVICE_ACCOUNT_KEY")
