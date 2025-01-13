@@ -13,7 +13,15 @@ class PriorityQueue:
             "https://spreadsheets.google.com/feeds",
             "https://www.googleapis.com/auth/drive",
         ]
-        service_account_info = json.loads(os.environ.get("SERVICE_ACCOUNT_KEY"))
+        service_account_key = os.environ.get("SERVICE_ACCOUNT_KEY")
+
+        if not service_account_key:
+            raise ValueError("SERVICE_ACCOUNT_KEY environment variable is not set or is empty")
+
+        try:
+            service_account_info = json.loads(service_account_key)
+        except json.JSONDecodeError:
+            raise ValueError("Invalid JSON format for SERVICE_ACCOUNT_KEY")
 
         # Authenticate using the credentials dictionary
         creds = ServiceAccountCredentials.from_json_keyfile_dict(service_account_info, scope)
