@@ -172,7 +172,13 @@ def list_files_in_current_directory():
 def process(args):
 
     try:
-
+        voices = {
+            "male": "en-US-AndrewNeural",
+            "female": "en-US-AvaNeural"
+        }
+        cleanup_files()
+        overall_start = time.time()  # Start overall timing
+    
         print("STARTED FETCHING POST FROM PQ")
         start = time.time()
         pq = PriorityQueue(sheet_name="Redit Posts")
@@ -180,47 +186,72 @@ def process(args):
         end = time.time()
         print("GOT THE POST FROM QUEUE")
         print(f"Time taken: {end - start:.2f} seconds\n")
-
-
-        print("STARTED FETCHING POST FROM PQ")
+    
+        print("STARTED TEXT TO SPEECH PROCESS")
         start = time.time()
-        pq = PriorityQueue(sheet_name="Redit Posts")
-        post = pq.front()
+        script = f'{post["Post Revised Title"]} \n\n {post["Post Revised Content"]}'
+        voice = voices.get(post["Post Character"], "male")
+        folder_path = f'results/{post["Post ID"]}'
+        # create_folder_if_not_exists(folder_path)
+        audio_path = f'audio.mp3'
+        subtitles_path = f'subtitles.srt'
+        asyncio.run(text_to_speech(script, voice, audio_path, subtitles_path))
         end = time.time()
-        print("GOT THE POST FROM QUEUE")
+        print("COMPLETED TEXT TO SPEECH PROCESS")
         print(f"Time taken: {end - start:.2f} seconds\n")
-
-
+    
         print("STARTED DOWNLOADING BACKGROUND VIDEO")
         start = time.time()
-        url = 'https://www.youtube.com/watch?v=n_Dv4JMiwK8'  # Replace with your video URL
-        start_time = 30  # Start time in seconds
-        end_time = 60    # End time in seconds
-        output_file = 'result.mp4'  # Output file name
-        audio_file = 'results/diuucz/audio.mp3'
-        subtitles_file = 'results/diuucz/subtitles.srt'
-        YoutubeDownload().stream_and_crop_video(url, start_time, end_time, output_file, audio_file, subtitles_file)
+        minecraft_video_url = 'https://www.youtube.com/watch?v=n_Dv4JMiwK8'
+        bg_video_length = 4813  # TODO : get this from yt-dlp itself in info
+        audio_length = get_audio_length(audio_path)
+    
+        # # Make this randomize
+        start_time = random.randint(10, bg_video_length - audio_length)
+        end_time = start_time + audio_length
+        print("start_time : ", start_time, " | end_time : ", end_time)
+        output_video_path = f'result.mp4'
+        # TODO: try to add multi-resolution option
+        YoutubeDownload().stream_and_crop_video(url=minecraft_video_url, start_time=start_time, end_time=end_time, output_file_path=output_video_path, audio_file=audio_path, subtitles_file=subtitles_path)
         end = time.time()
-        print("COMPLETED DOWNLOADING BACKGROUND VIDEO")
+        print("BACKGROUND VIDEO DOWNLOAD COMPLETE")
         print(f"Time taken: {end - start:.2f} seconds\n")
-
+    
+    
+        # print("STARTED STITCHING BG + AUDIO + SUBS")
+        # start = time.time()
+        # output_video_path = f'{folder_path}/result.mp4'
+        # add_audio_and_subtitles_to_video(background_video_path, audio_path, subtitles_path, output_video_path)
+        # end = time.time()
+        # print("COMPLETED STITCHING BG + AUDIO + SUBS")
+        # print(f"Time taken: {end - start:.2f} seconds\n")
+    
+    
         print("STARTED GOOGLE DRIVE UPLOADING")
         start = time.time()
-        child_folder_name = 'diuucz'
+        child_folder_name = post["Post ID"]
         parent_folder_id = "1PVR606GT6kWsuqGt97mH4NEv3SmvJww5"
-
+    
         drive = GoogleDrive()
-        output_video_path = f'result.mp4'
+    
         drive_service = drive.authenticate_with_service_account()
         child_folder_id = drive.create_folder(drive_service, child_folder_name, parent_folder_id)
         drive.upload_video_to_drive(drive_service, output_video_path, child_folder_id)
         end = time.time()
         print("COMPLETED GOOGLE DRIVE UPLOADING")
         print(f"Time taken: {end - start:.2f} seconds\n")
+    
 
-
+        # Remove processed request
+        print("Starte removing processed request from queue")
+        start = time.time()
+        pq.pop()
+        end = time.time()
+        print("Removed processed request from queue")
+        print(f"Time taken: {end - start:.2f} seconds\n")
+    
         # claenup 
-        print("STARTED CLEANUPs")
+        print("STARTED CLEANUP")
         start = time.time()
         list_files_in_current_directory()
         cleanup_files()
@@ -228,6 +259,10 @@ def process(args):
         end = time.time()
         print("COMPLETED CLEANUP")
         print(f"Time taken: {end - start:.2f} seconds\n")
+    
+    
+        overall_end = time.time()
+        print(f"Overall time taken: {overall_end - overall_start:.2f} seconds")
     except Exception as e:
         print("CAUGHT EXCEPTION : ", str(e))
         print("STARTED CLEANUPs")
@@ -238,91 +273,6 @@ def process(args):
         end = time.time()
         print("COMPLETED CLEANUP")
         print(f"Time taken: {end - start:.2f} seconds\n")
-    return
-    voices = {
-        "male": "en-US-AndrewNeural",
-        "female": "en-US-AvaNeural"
-    }
-    cleanup_files()
-    overall_start = time.time()  # Start overall timing
-
-    print("STARTED FETCHING POST FROM PQ")
-    start = time.time()
-    pq = PriorityQueue(sheet_name="Redit Posts")
-    post = pq.front()
-    end = time.time()
-    print("GOT THE POST FROM QUEUE")
-    print(f"Time taken: {end - start:.2f} seconds\n")
-
-    print("STARTED TEXT TO SPEECH PROCESS")
-    start = time.time()
-    script = f'{post["Post Revised Title"]} \n\n {post["Post Revised Content"]}'
-    voice = voices.get(post["Post Character"], "male")
-    folder_path = f'results/{post["Post ID"]}'
-    # create_folder_if_not_exists(folder_path)
-    audio_path = f'audio.mp3'
-    subtitles_path = f'subtitles.srt'
-    asyncio.run(text_to_speech(script, voice, audio_path, subtitles_path))
-    end = time.time()
-    print("COMPLETED TEXT TO SPEECH PROCESS")
-    print(f"Time taken: {end - start:.2f} seconds\n")
-
-    print("STARTED DOWNLOADING BACKGROUND VIDEO")
-    start = time.time()
-    minecraft_video_url = 'https://www.youtube.com/watch?v=n_Dv4JMiwK8'
-    bg_video_length = 4813  # TODO : get this from yt-dlp itself in info
-    audio_length = get_audio_length(audio_path)
-
-    # # Make this randomize
-    start_time = random.randint(10, bg_video_length - audio_length)
-    end_time = start_time + audio_length
-    print("start_time : ", start_time, " | end_time : ", end_time)
-    output_video_path = f'result.mp4'
-    # TODO: try to add multi-resolution option
-    YoutubeDownload().stream_and_crop_video(url=minecraft_video_url, start_time=start_time, end_time=end_time, output_file_path=output_video_path, audio_file=audio_path, subtitles_file=subtitles_path)
-    end = time.time()
-    print("BACKGROUND VIDEO DOWNLOAD COMPLETE")
-    print(f"Time taken: {end - start:.2f} seconds\n")
-
-
-    # print("STARTED STITCHING BG + AUDIO + SUBS")
-    # start = time.time()
-    # output_video_path = f'{folder_path}/result.mp4'
-    # add_audio_and_subtitles_to_video(background_video_path, audio_path, subtitles_path, output_video_path)
-    # end = time.time()
-    # print("COMPLETED STITCHING BG + AUDIO + SUBS")
-    # print(f"Time taken: {end - start:.2f} seconds\n")
-
-
-    print("STARTED GOOGLE DRIVE UPLOADING")
-    start = time.time()
-    child_folder_name = post["Post ID"]
-    parent_folder_id = "1PVR606GT6kWsuqGt97mH4NEv3SmvJww5"
-
-    drive = GoogleDrive()
-
-    drive_service = drive.authenticate_with_service_account()
-    child_folder_id = drive.create_folder(drive_service, child_folder_name, parent_folder_id)
-    drive.upload_video_to_drive(drive_service, output_video_path, child_folder_id)
-    end = time.time()
-    print("COMPLETED GOOGLE DRIVE UPLOADING")
-    print(f"Time taken: {end - start:.2f} seconds\n")
-
-
-
-    # claenup 
-    print("STARTED CLEANUP")
-    start = time.time()
-    list_files_in_current_directory()
-    cleanup_files()
-    list_files_in_current_directory()
-    end = time.time()
-    print("COMPLETED CLEANUP")
-    print(f"Time taken: {end - start:.2f} seconds\n")
-
-
-    overall_end = time.time()
-    print(f"Overall time taken: {overall_end - overall_start:.2f} seconds")
     # srt_to_ass_with_styles("results/diuucz/subtitles.srt", "results/diuucz/subtitles.ass")
 
 
