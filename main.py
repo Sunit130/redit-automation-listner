@@ -13,6 +13,7 @@ from moviepy  import VideoFileClip, AudioFileClip, TextClip, CompositeVideoClip
 from google_drive import GoogleDrive
 from download_yt_video import YoutubeDownload
 from priority_queue import PriorityQueue
+from utils import print_storage_info
 
 
 
@@ -226,7 +227,8 @@ def process(args):
         # print("COMPLETED STITCHING BG + AUDIO + SUBS")
         # print(f"Time taken: {end - start:.2f} seconds\n")
     
-    
+        print_storage_info()
+        
         print("STARTED GOOGLE DRIVE UPLOADING")
         start = time.time()
         child_folder_name = post["Post ID"]
@@ -240,7 +242,8 @@ def process(args):
         end = time.time()
         print("COMPLETED GOOGLE DRIVE UPLOADING")
         print(f"Time taken: {end - start:.2f} seconds\n")
-    
+
+        print_storage_info()
 
         # Remove processed request
         print("Starte removing processed request from queue")
@@ -259,7 +262,8 @@ def process(args):
         end = time.time()
         print("COMPLETED CLEANUP")
         print(f"Time taken: {end - start:.2f} seconds\n")
-    
+
+        print_storage_info()
     
         overall_end = time.time()
         print(f"Overall time taken: {overall_end - overall_start:.2f} seconds")
