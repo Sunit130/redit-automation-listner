@@ -41,7 +41,7 @@ class YoutubeDownload:
 
         options = {
             "format": "bestvideo",
-            "cookiefile": "cookies.txt",
+            "cookiefile": 'cookies.txt',
             "outtmpl": cliped_file_path,
             "download_ranges": download_ranges_callback_func,
             "overwrites": True,
