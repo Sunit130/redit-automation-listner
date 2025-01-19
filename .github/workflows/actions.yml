@@ -21,15 +21,19 @@ jobs:
         with:
           python-version: '3.10' # install the python version needed
 
+        - name: Decrypt cookies.txt
+        env:
+          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" \
+          --output cookies.txt cookies.txt.gpg
+
       - name: install system dependencies
         run: |
           sudo apt-get update && sudo apt-get install -y \
           ffmpeg \
           vim \
           && sudo apt-get clean
-
-      - name: Decode cookies.txt
-        run: echo "${{ secrets.COOKIES_BASE64 }}" | base64 -d > cookies.txt
 
       - name: install python packages
         run: |
