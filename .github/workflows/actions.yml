@@ -21,7 +21,7 @@ jobs:
         with:
           python-version: '3.10' # install the python version needed
 
-        - name: Decrypt cookies.txt
+      - name: Decrypt cookies.txt
         env:
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
