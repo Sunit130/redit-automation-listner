@@ -1,19 +1,36 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
-import uuid
 import json
 import os
-from utils import get_google_service_account_key
 
 class PriorityQueue:
     def __init__(self, sheet_name, worksheet_name="Queue"):
         # Authenticate and initialize the Google Sheet
+        service_account_key = os.environ.get("SERVICE_ACCOUNT_KEY")
         scope = [
             "https://spreadsheets.google.com/feeds",
             "https://www.googleapis.com/auth/drive",
         ]
-        service_account_key = os.environ.get("SERVICE_ACCOUNT_KEY")
+        self.headers = [
+            'Priority',
+            'Date Time',
+            'Post ID',
+            'Post Date',
+            'Post Sub-Reddit',
+            'Post Progress',
+            'Post Score',
+            'Post Normalized Score',
+            'Post Title',
+            'Post Content',
+            'Post Content Length',
+            'Post Revised Title',
+            'Post Revised Content',
+            'Post Revised Content Length',
+            'Post Character',
+            'Post Link',
+            'Video ID'
+        ]
 
         if not service_account_key:
             raise ValueError("SERVICE_ACCOUNT_KEY environment variable is not set or is empty")
@@ -53,29 +70,18 @@ class PriorityQueue:
         self.worksheet.append_row(headers)
 
 
-    def push(self, post_id, title, content, character, priority=0):
+    def push(self, post, priority=0):
         """
         Add a task to the priority queue with a precise timestamp.
         """
-        # Get all the existing data from the worksheet
-        all_data = self.worksheet.get_all_values()
-        
         # Prepare the new row
         date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")  # Include microseconds
-        unique_id = str(uuid.uuid4())  # Generate a unique identifier
-        row = [priority, date_time, unique_id, post_id, title, content, character]
-        
-        # Append the new rows to the existing data (skipping header)
-        data = all_data[1:]  # Get all the data, skipping the header
-        data.extend([row])  # Add new rows to the data list
+        row = [priority, date_time, *(post.get(col) for col in self.headers[2:])]
+        print("PQ UPDATED WITH row : ", row)
+        self.worksheet.append_row(row)
 
         # Sort all data by priority (descending) and date time (ascending for ties)
-        sorted_data = sorted(data, key=lambda x: (-int(x[0]), x[1]))  # Sort only the data
-
-        # Clear the worksheet and append the header and sorted data in one go
-        self.worksheet.clear()
-        self.worksheet.append_row(all_data[0])  # Append header row
-        self.worksheet.append_rows(sorted_data)  # Append sorted data
+        # Sorting logic is written in spread sheet AppScript
 
 
 
@@ -83,32 +89,17 @@ class PriorityQueue:
         """
         Add multiple tasks to the priority queue with a precise timestamp and default priority value.
         """
-        # Get all the existing data from the worksheet
-        all_data = self.worksheet.get_all_values()
-
         # Prepare new rows
         rows_to_insert = []
         for message in messages:
             date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")  # Include microseconds
-            unique_id = str(uuid.uuid4())  # Generate a unique identifier
-            row = [priority, date_time, unique_id, message['Post ID'], message['Post Revised Title'], message['Post Revised Content'], message['Post Character']]
+            row = [priority, date_time, *(message.get(col) for col in self.headers[2:])]
             rows_to_insert.append(row)
 
-        print("rows_to_insert : ", rows_to_insert)
-        
-        # Append the new rows to the existing data (skipping header)
-        data = all_data[1:]  # Get all the data, skipping the header
-        data.extend(rows_to_insert)  # Add new rows to the data list
-        print("data after extending : ", data)
-
+        print("PQ UPDATED WITH rows_to_insert : ", rows_to_insert)
+        self.worksheet.append_rows(rows_to_insert)
         # Sort all data by priority (descending) and date time (ascending for ties)
-        sorted_data = sorted(data, key=lambda x: (-int(x[0]), x[1]))  # Sort only the data
-        print("sorted_data : ", sorted_data)
-
-        # Clear the worksheet and append the header and sorted data in one go
-        self.worksheet.clear()
-        self.worksheet.append_row(all_data[0])  # Append header row
-        self.worksheet.append_rows(sorted_data)  # Append sorted data
+        # Sorting logic is written in spread sheet AppScript
 
 
     def is_empty(self):
@@ -157,51 +148,3 @@ class PriorityQueue:
         self.worksheet.delete_rows(2)
         print(f"Popped task: {task}")
         return task
-
-
-# Example Usage
-# if __name__ == "__main__":
-#     pq = PriorityQueue(sheet_name="Redit Posts")
-
-#     # List of messages to push in bulk
-#     messages = [
-#         {
-#             'Post ID': 'Post123',
-#             'Post Revised Title': 'Title A',
-#             'Post Revised Content': 'Content A',
-#             'Post Character': 'Character A',
-#         },
-#         {
-#             'Post ID': 'Post456',
-#             'Post Revised Title': 'Title B',
-#             'Post Revised Content': 'Content B',
-#             'Post Character': 'Character B',
-#         },
-#         {
-#             'Post ID': 'Post452',
-#             'Post Revised Title': 'Title a',
-#             'Post Revised Content': 'Contant B',
-#             'Post Character': 'Character a',
-#         },
-#         {
-#             'Post ID': 'Post451',
-#             'Post Revised Title': 'Title d',
-#             'Post Revised Content': 'Content B',
-#             'Post Character': 'Character d',
-#         }
-#     ]
-    
-#     # Push multiple messages in bulk
-#     # pq.bulk_push(messages)
-
-#     pq.push(
-#     post_id=1,
-#     title="asdasdasdasd",
-#     content="asdasdasdasd",
-#     character="asdasdasdasd",
-#     priority=1)
-
-#     pq.pop()
-
-#     # View the updated queue
-#     print("Queue after bulk push:", pq.worksheet.get_all_values())
