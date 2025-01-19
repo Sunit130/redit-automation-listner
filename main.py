@@ -108,7 +108,7 @@ def time_to_seconds(timestamp):
 
 def cleanup_files():
     # List of files to check and remove
-    files_to_remove = ["audio.mp3", "subtitles.srt", "result.mp4", "cliped_video.mp4"]
+    files_to_remove = ["audio.mp3", "subtitles.srt", "result.mp4", "cliped_video.mp4", 'cookies.txt']
 
     print("\nStarted removeing used files")
     for file in files_to_remove:
