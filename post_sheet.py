@@ -100,6 +100,8 @@ class PostsSpreadSheet:
         pq = PriorityQueue(sheet_name="Redit Posts")
         pq.bulk_push(top_ready_posts)
 
+        print("Deleting top 5 rows from the worksheet")
+        self.worksheet.delete_rows(2, 6)
         print(f"Updated status UPDATED for redit-posts")
 
 
