@@ -109,7 +109,7 @@ class YoutubeDownload:
             # Find the best format with resolution >= 1920x1080
             best_format = None
             for fmt in formats:
-                if fmt.get("format_note", "") == '1080p60' and fmt.get("ext", "") == "mp4":
+                if '1080p60' in fmt.get("format_note", "") and fmt.get("ext", "") == "mp4":
                     best_format = fmt
                     break
 
