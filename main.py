@@ -295,8 +295,8 @@ def process(args):
         start = time.time()
         youtube_credentials_json = os.getenv("YOUTUBE_CREDENTIALS")
         if not youtube_credentials_json:
-            print("Missing environment variables for credentials.")
-            return "Error: Missing credentials."
+            print("Missing Youtube environment variables for credentials.")
+            raise "Error: Missing Youtube credentials."
         youtube_credentials_info = json.loads(youtube_credentials_json)
         youtube_creds = authenticate_with_user_info(SCOPES["youtube"], youtube_credentials_info)
         youtube_service = build("youtube", "v3", credentials=youtube_creds)
