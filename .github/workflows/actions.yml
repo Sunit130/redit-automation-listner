@@ -42,7 +42,7 @@ jobs:
 
       - name: yt-dlp test
         run: |
-          yt-dlp --cookies cookies.txt https://www.youtube.com/shorts/LxQi1DFRCOo
+          yt-dlp -vU --cookies cookies.txt https://www.youtube.com/shorts/LxQi1DFRCOo
           
       - name: Run Python Script
         env:
