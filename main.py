@@ -272,7 +272,7 @@ def process(args):
         audio_length = YoutubeDownload.get_audio_length(audio_path)
         filtered_videos = list(filter(lambda x: x["duration"] > audio_length, MINECRAFT_VIDEO_LIST))
         bg_video_url = filtered_videos[random.randint(0, len(filtered_videos)-1)]["url"]
-    
+        print("before - audio.mp3 audio_length : ", audio_length, " | \nfiltered_videos : ", filtered_videos, "\n")
         output_video_path = f'result.mp4'
         YoutubeDownload().stream_and_crop_video(
             url = bg_video_url, 
