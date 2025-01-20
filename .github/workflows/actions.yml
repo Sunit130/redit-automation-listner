@@ -26,7 +26,7 @@ jobs:
           PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
           gpg --quiet --batch --yes --decrypt --passphrase="$PASSPHRASE" \
-          --output cookies.txt cookies.txt.gpg
+          --output cookies.txt cookies.firefox-private.txt.gpg
 
       - name: install system dependencies
         run: |
@@ -42,7 +42,7 @@ jobs:
 
       - name: yt-dlp test
         run: |
-          yt-dlp -vU --cookies cookies.firefox-private.txt.gpg https://www.youtube.com/shorts/LxQi1DFRCOo
+          yt-dlp -vU --cookies cookies.txt https://www.youtube.com/shorts/LxQi1DFRCOo
           
       - name: Run Python Script
         env:
