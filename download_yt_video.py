@@ -89,10 +89,11 @@ class YoutubeDownload:
     def stream_and_crop_video(self, url, output_file_path, audio_path, subtitles_file, title_end_time, redit_id):
 
         audio_length = self.get_audio_length(audio_path)
-        video_duration = self.get_video_duration(url)  
+        video_duration = self.get_video_duration(url) 
+        print("audio_length : ", audio_length , " | video_duration : ", video_duration)
         start_time = random.randint(10, video_duration - audio_length)
         end_time = start_time + audio_length
-        print("start_time : ", start_time, " | end_time : ", end_time, " | audio_length : ", audio_length , " | video_duration : ", video_duration)
+        print("start_time : ", start_time, " | end_time : ", end_time)
         
         cliped_file_path = 'cliped_video.mp4'
         options = self.get_yt_dlp_options(start_time, end_time, cliped_file_path)
