@@ -108,7 +108,7 @@ def time_to_seconds(timestamp):
 
 def cleanup_files():
     # List of files to check and remove
-    files_to_remove = ["audio.mp3", "subtitles.srt", "result.mp4", "cliped_video.mp4", 'cookies.txt']
+    files_to_remove = ["audio.mp3", "subtitles.srt", "result.mp4", "cliped_video.mp4"]
 
     print("\nStarted removeing used files")
     for file in files_to_remove:
@@ -218,7 +218,6 @@ def process(args):
         }
         audio_path = f'audio.mp3'
         subtitles_path = f'subtitles.srt'
-        cleanup_files()
         overall_start = time.time()  # Start overall timing
 
         redit_post_sheet = PostsSpreadSheet(sheet_name="Redit Posts")
@@ -329,6 +328,15 @@ def process(args):
         start = time.time()
         list_files_in_current_directory()
         cleanup_files()
+        file = 'cookies.txt'
+        if os.path.exists(file):
+            try:
+                os.remove(file)
+                print(f"Removed: {file}")
+            except Exception as e:
+                print(f"Error removing {file}: {e}")
+        else:
+            print(f"{file} does not exist.")
         list_files_in_current_directory()
         end = time.time()
         print_storage_info()
