@@ -74,9 +74,11 @@ class YoutubeDownload:
             int: Duration of the video in seconds, or None if not found.
         """
         try:
+            print("Checking Video Duration")
             options = {
-                "quiet": True,  # Suppress output for cleaner logs
-                "no_warnings": True,
+                "cookiefile": "cookies.txt",
+                "quiet": False,
+                "verbose": True,
             }
             with YoutubeDL(options) as ydl:
                 video_info = ydl.extract_info(url, download=False)
@@ -86,10 +88,9 @@ class YoutubeDownload:
             return None
 
 
-    def stream_and_crop_video(self, url, output_file_path, audio_path, subtitles_file, title_end_time, redit_id):
+    def stream_and_crop_video(self, url, output_file_path, audio_path, subtitles_file, title_end_time, redit_id, video_duration):
 
         audio_length = self.get_audio_length(audio_path)
-        video_duration = self.get_video_duration(url) 
         print("audio_length : ", audio_length , " | video_duration : ", video_duration)
         start_time = random.randint(10, video_duration - audio_length)
         end_time = start_time + audio_length

@@ -271,7 +271,9 @@ def process(args):
         start = time.time()
         audio_length = YoutubeDownload.get_audio_length(audio_path)
         filtered_videos = list(filter(lambda x: x["duration"] > audio_length, MINECRAFT_VIDEO_LIST))
-        bg_video_url = filtered_videos[random.randint(0, len(filtered_videos)-1)]["url"]
+        selected_video = filtered_videos[random.randint(0, len(filtered_videos)-1)]
+        bg_video_url = selected_video["url"]
+        video_duration = selected_video["duration"]
         print("before - audio.mp3 audio_length : ", audio_length, " | \nfiltered_videos : ", filtered_videos, "\n")
         output_video_path = f'result.mp4'
         YoutubeDownload().stream_and_crop_video(
@@ -280,7 +282,8 @@ def process(args):
             audio_path = audio_path, 
             subtitles_file = subtitles_path,
             title_end_time = title_end_time,
-            redit_id = redit_post_id
+            redit_id = redit_post_id,
+            video_duration = video_duration
             )
         end = time.time()
         print("BACKGROUND VIDEO DOWNLOAD COMPLETE")
