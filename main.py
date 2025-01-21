@@ -258,7 +258,7 @@ def process(args):
         font_color = "#000000"
         padding = 5
         Path(f"assets/temp/{redit_post_id}/png").mkdir(parents=True, exist_ok=True)
-        title_img = create_fancy_thumbnail(title_template, normalize_script_title, font_color, padding)
+        title_img = create_fancy_thumbnail(title_template, script_title, font_color, padding)
         title_img.save(f"assets/temp/{redit_post_id}/png/title.png")
         title_end_time = find_title_end_time_by_words(subtitles_path, normalize_script_title)
         end = time.time()
