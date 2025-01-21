@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 def name_normalize(name: str) -> str:
-    name = re.sub(r'[?\\"%*:|<>]', "", name)
+    name = re.sub(r'[?\\"%*,:|<>]', "", name)
     name = re.sub(r"( [w,W]\s?\/\s?[o,O,0])", r" without", name)
     name = re.sub(r"( [w,W]\s?\/)", r" with", name)
     name = re.sub(r"(\d+)\s?\/\s?(\d+)", r"\1 of \2", name)
