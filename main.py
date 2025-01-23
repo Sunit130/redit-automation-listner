@@ -155,7 +155,7 @@ def upload_video_to_youtube(video_file, title, description, category, youtube_se
             "description": description,
         },
         "status": {
-            "privacyStatus": "unlisted",
+            "privacyStatus": "public",
             "embeddable": True,
             "selfDeclaredMadeForKids": False
         },
