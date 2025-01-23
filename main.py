@@ -213,7 +213,7 @@ def process(args):
     try:
         voices = {
             "male": {'voice': "en-US-AndrewNeural", 'pitch': '+0Hz'},
-            "female": {'voice': "en-US-AvaNeural", 'pitch': '-7Hz'}
+            "female": {'voice': "en-US-EmmaNeural", 'pitch': '+0Hz'}
         }
         audio_path = f'audio.mp3'
         subtitles_path = f'subtitles.srt'
