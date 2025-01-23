@@ -1,7 +1,7 @@
 name: get top weekly
 
 on:
-  # Automatically runs every 5 minutes
+  # Automatically runs every 0.00 Sunday
   schedule:
     - cron: '0 0 * * 0'
   
@@ -14,12 +14,12 @@ jobs:
     steps:
 
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+        uses: actions/checkout@v2
 
       - name: setup python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10' # install the python version needed
+          python-version: '3.10'
 
       - name: install system dependencies
         run: |
@@ -35,8 +35,8 @@ jobs:
           
       - name: Run Python Script
         env:
-          REDIT_CLIENT_ID: ${{ REDIT_CLIENT_ID }}
-          REDIT_SECRET_ID: ${{ REDIT_SECRET_ID }}
-          REDIT_USER_AGENT: ${{ REDIT_USER_AGENT }}
+          REDIT_CLIENT_ID: ${{ secrets.REDIT_CLIENT_ID }}
+          REDIT_SECRET_ID: ${{ secrets.REDIT_SECRET_ID }}
+          REDIT_USER_AGENT: ${{ secrets.REDIT_USER_AGENT }}
         run: python batch_redit.py
         
