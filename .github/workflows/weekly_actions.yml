@@ -1,0 +1,42 @@
+name: get top weekly
+
+on:
+  # Automatically runs every 5 minutes
+  schedule:
+    - cron: '0 0 * * 0'
+  
+  # Manual trigger for running the workflow
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: checkout repo content
+        uses: actions/checkout@v2 # checkout the repository content to github runner
+
+      - name: setup python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' # install the python version needed
+
+      - name: install system dependencies
+        run: |
+          sudo apt-get update && sudo apt-get install -y \
+          ffmpeg \
+          vim \
+          && sudo apt-get clean
+
+      - name: install python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          
+      - name: Run Python Script
+        env:
+          REDIT_CLIENT_ID: ${{ REDIT_CLIENT_ID }}
+          REDIT_SECRET_ID: ${{ REDIT_SECRET_ID }}
+          REDIT_USER_AGENT: ${{ REDIT_USER_AGENT }}
+        run: python batch_redit.py
+        
