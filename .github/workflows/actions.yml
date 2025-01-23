@@ -1,9 +1,8 @@
 name: run main.py
 
 on:
-  # Automatically runs every 5 minutes
   schedule:
-    - cron: '0 * * * *'
+    - cron: '0 */4 * * *'
   
   # Manual trigger for running the workflow
   workflow_dispatch:
@@ -14,12 +13,12 @@ jobs:
     steps:
 
       - name: checkout repo content
-        uses: actions/checkout@v2 # checkout the repository content to github runner
+        uses: actions/checkout@v2
 
       - name: setup python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10' # install the python version needed
+          python-version: '3.10'
 
       - name: Decrypt cookies.txt
         env:

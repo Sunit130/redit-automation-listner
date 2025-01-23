@@ -236,7 +236,7 @@ def process(args):
         print(f"Time taken: {end - start:.2f} seconds\n")
     
         redit_post_id = post["Post ID"]
-        script_title = post["Post Revised Title"]
+        script_title = post["Post Title"]
         script_content = post["Post Revised Content"]
         category = post["Post Sub-Reddit"]
 
