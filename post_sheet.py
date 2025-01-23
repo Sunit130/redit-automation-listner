@@ -82,8 +82,10 @@ class PostsSpreadSheet:
             for post in posts if post['id'] not in already_available_post_ids
         ]
         if not data:
-            raise "Posts already available or no new posts on redit"
-        self.worksheet.insert_rows(data, 2)
+            raise ValueError("Posts already available or no new posts on Reddit.")
+        
+        # Append data at the bottom of the existing list
+        self.worksheet.append_rows(data)
 
 
     def populate_queue_messages(self):
