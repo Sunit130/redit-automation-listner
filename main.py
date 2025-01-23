@@ -39,7 +39,7 @@ YOUTUBE_PUBLIC_WORKSHEET = "Youtube Public"
 async def text_to_speech(text, voice, pitch, audio_path, subtitles_path):
 
     print("\nStarted for : ", voice )
-    communicate = edge_tts.Communicate(text, voice, rate="+15%", pitch=pitch)
+    communicate = edge_tts.Communicate(text, voice, rate="+17%", pitch=pitch)
     submaker = edge_tts.SubMaker()
     try:
         audio_file = (
@@ -151,9 +151,8 @@ def upload_video_to_youtube(video_file, title, description, category, youtube_se
     # Prepare the request body for uploading the video
     request_body = {
         "snippet": {
-            "title": title,
+            "title": f'{title} #shorts #reddit #redditstories',
             "description": description,
-            "tags": [category, f'{category} stories', "redit stories", "minecraft parkor"],
         },
         "status": {
             "privacyStatus": "unlisted",
@@ -214,7 +213,7 @@ def process(args):
     try:
         voices = {
             "male": {'voice': "en-US-AndrewNeural", 'pitch': '+0Hz'},
-            "female": {'voice': "en-US-AvaNeural", 'pitch': '-5Hz'}
+            "female": {'voice': "en-US-AvaNeural", 'pitch': '-7Hz'}
         }
         audio_path = f'audio.mp3'
         subtitles_path = f'subtitles.srt'
