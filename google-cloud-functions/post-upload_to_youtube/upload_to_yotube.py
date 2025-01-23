@@ -72,7 +72,7 @@ def update_video_privacy(video_id):
             body={
                 "id": video_id,
                 "status": {
-                    "privacyStatus": "public"
+                    "privacyStatus": "private"
                 }
             }
         ).execute()
