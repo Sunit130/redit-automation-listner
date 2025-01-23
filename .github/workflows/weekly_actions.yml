@@ -38,5 +38,7 @@ jobs:
           REDIT_CLIENT_ID: ${{ secrets.REDIT_CLIENT_ID }}
           REDIT_SECRET_ID: ${{ secrets.REDIT_SECRET_ID }}
           REDIT_USER_AGENT: ${{ secrets.REDIT_USER_AGENT }}
+          OPEN_API_KEY: ${{ secrets.OPEN_API_KEY }}
+          OPEN_API_URL: ${{ secrets.OPEN_API_URL }}
         run: python batch_redit.py
         
