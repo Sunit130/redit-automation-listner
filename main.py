@@ -191,6 +191,7 @@ def find_title_end_time_by_words(srt_file_path, title):
             start_time, end_time, text = match.groups()
             # Remove formatting (like {\an5}) and strip the text
             cleaned_text = re.sub(r"{\\an\d+}", "", text).strip()
+            cleaned_text = name_normalize(cleaned_text)
             print(f"Checking block: {block}")
             print(f"Cleaned Text: '{cleaned_text}', Title Word: '{title_words[title_index]}'")
             # Check if the current subtitle matches the current title word
@@ -204,7 +205,7 @@ def find_title_end_time_by_words(srt_file_path, title):
                     return time_to_seconds(end_time)
 
     print("Title not found in subtitles.")
-    return None
+    return 3
 
 
 
