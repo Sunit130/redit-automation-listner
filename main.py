@@ -151,7 +151,7 @@ def upload_video_to_youtube(video_file, title, description, category, youtube_se
     # Prepare the request body for uploading the video
     request_body = {
         "snippet": {
-            "title": f'{title} #shorts #reddit #redditstories',
+            "title": f"""{title} #shorts #reddit #redditstories""",
             "description": description,
         },
         "status": {
@@ -160,7 +160,7 @@ def upload_video_to_youtube(video_file, title, description, category, youtube_se
             "selfDeclaredMadeForKids": False
         },
     }
-
+    print("Youtube upload request_body : ",request_body)
     # Upload the video
     media = MediaFileUpload(video_file, chunksize=-1, resumable=True)
     request = youtube_service.videos().insert(
