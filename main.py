@@ -39,7 +39,7 @@ YOUTUBE_PUBLIC_WORKSHEET = "Youtube Public"
 async def text_to_speech(text, voice, pitch, audio_path, subtitles_path):
 
     print("\nStarted for : ", voice )
-    communicate = edge_tts.Communicate(text, voice, rate="+17%", pitch=pitch)
+    communicate = edge_tts.Communicate(text, voice, rate="+20%", pitch=pitch)
     submaker = edge_tts.SubMaker()
     try:
         audio_file = (
