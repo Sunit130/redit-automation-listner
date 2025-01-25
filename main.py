@@ -165,19 +165,7 @@ def upload_video_to_youtube(video_file, title, description, category, youtube_se
         "tifu funny and awkward moments",
         "relationship advice and drama",
         "confession secrets revealed",
-        "pro revenge epic payback stories",
-        "malicious compliance", " funny compliance stories",
-        "viral Reddit stories compilation",
-        "shorts Reddit drama",
-        "funny Reddit moments compilation",
-        "creepy and scary nosleep stories",
-        "real-life revenge stories Reddit",
-        "awkward and funny tifu moments",
-        "entertaining Reddit shorts videos",
-        "emotional and raw confession stories",
-        "Reddit stories you can't stop watching",
-        "top Reddit drama of the week",
-        "epic and hilarious Reddit stories"]
+        "pro revenge epic payback stories",]
     
     # Prepare the request body for uploading the video
     request_body = {
