@@ -155,29 +155,13 @@ def upload_video_to_youtube(video_file, title, description, category, youtube_se
     )
     
     # Generic tags relevant to your content
-    generic_tags = ["Reddit", "stories", "shorts", "nosleep", "AmItheAsshole", "tifu",
-        "relationships", "confession", "ProRevenge", "MaliciousCompliance",
-        "funny", "scary", "horror", "drama", "entertainment", "viral", "Redditstories"
-        ,"Reddit stories compilation",
-        "Best Reddit stories of 2025",
-        "nosleep scary horror stories",
-        "Am I the A**hole stories explained",
-        "tifu funny and awkward moments",
-        "relationship advice and drama",
-        "confession secrets revealed",
-        "pro revenge epic payback stories",
-        "malicious compliance funny compliance stories",
-        "viral Reddit stories compilation",
-        "shorts Reddit drama",
-        "funny Reddit moments compilation",
-        "creepy and scary nosleep stories",
-        "real-life revenge stories Reddit",
-        "awkward and funny tifu moments",
-        "entertaining Reddit shorts videos",
-        "emotional and raw confession stories",
-        "Reddit stories you can't stop watching",
-        "top Reddit drama of the week",
-        "epic and hilarious Reddit stories"]
+    generic_tags = [
+        "Reddit", "Reddit stories", "shorts", "nosleep", "Am I the Asshole", 
+        "tifu", "relationships", "confession", "ProRevenge", "MaliciousCompliance",
+        "funny", "scary", "horror", "drama", "entertainment", "viral", "story compilation",
+        "creepy stories", "real-life stories", "funny moments", "horror shorts",
+        "relationship advice", "epic revenge", "awkward moments", "confession stories"
+    ]
     
     # Prepare the request body for uploading the video
     request_body = {
