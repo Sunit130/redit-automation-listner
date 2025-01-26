@@ -170,7 +170,7 @@ def upload_video_to_youtube(video_file, title, description, category, youtube_se
     # Prepare the request body for uploading the video
     request_body = {
         "snippet": {
-            "title": f"""{title[:50]}...-r/{category} #shorts #reddit #redditstories""",
+            "title": f"""{title[:40]}...-r/{category} #reddit #redditstories #{category}""",
             "description": generic_description,
             "tags": generic_tags,
             "categoryId": "24",
